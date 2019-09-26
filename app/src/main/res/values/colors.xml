@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00ffffff</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="dash_path">#ff89ae</color>
+
+
+    <color name="shadow_start">#3CD81B60</color>
+    <color name="shadow_end">#00474545</color>
+    <color name="asd">#800CDD</color>
+    <color name="asd2">#265E91</color>
+
+    <color name="drawable_icon">#66C0F6</color>
+    <color name="face">#3b5998</color>
+    <color name="twitter">#00acee</color>
+    <color name="plus">#CC3333</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="edittext_underline">#C4C4C4</color>
+    <color name="qer">#50CCCCCC</color>
+</resources>
