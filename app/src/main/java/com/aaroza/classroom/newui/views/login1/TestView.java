@@ -1,4 +1,4 @@
-package com.aaroza.classroom.newui.views;
+package com.aaroza.classroom.newui.views.login1;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.aaroza.classroom.newui.R;
 
-public class TestView2 extends View{
+public class TestView extends View{
 
     private Path line;
     private Paint paint;
@@ -20,7 +20,7 @@ public class TestView2 extends View{
     private Context context;
 
 
-    public TestView2(Context context, AttributeSet attributes){
+    public TestView(Context context, AttributeSet attributes){
         super(context, attributes);
         line = new Path();
         paint = new Paint();
@@ -34,13 +34,12 @@ public class TestView2 extends View{
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         line = new Path();
-        //paint.setColor(Color.parseColor(context.getString(R.color.dash_path)));
-        paint.setShader(new LinearGradient(0, 0, 0, getHeight(), context.getColor(R.color.shadow_start), context.getColor(R.color.shadow_end), Shader.TileMode.MIRROR));
-        paint.setShadowLayer(12, 0, 0, Color.YELLOW);
-        //paint.setShader(new LinearGradient(0, 0, 0, getHeight(), Color.parseColor("#AA56C7"), Color.parseColor("#E966B7"), Shader.TileMode.MIRROR));
+        paint.setColor(Color.parseColor(context.getString(R.color.dash_path)));
+        //paint.setShader(new LinearGradient(0, 0, 0, getHeight(), Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
+        paint.setShader(new LinearGradient(0, 0, 0, getHeight(), Color.parseColor("#AA56C7"), Color.parseColor("#E966B7"), Shader.TileMode.CLAMP));
         paint.setStrokeWidth(4);
-        line.lineTo(getWidth(), 0);
-        line.lineTo(getWidth(), getHeight());
+        line.moveTo(0, 0);
+        line.cubicTo(0, (float) (getHeight() / .75), getWidth() / 2, (float) (getHeight() / 1.5), (int)(getWidth() / 1.2), getHeight());
         line.lineTo(0, getHeight());
         line.lineTo(0, 0);
         line.close();

@@ -1,4 +1,4 @@
-package com.aaroza.classroom.newui.activity;
+package com.aaroza.classroom.newui.activity.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 

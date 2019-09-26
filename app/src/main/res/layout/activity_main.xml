@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
+    tools:context=".activity.login.MainActivity"
     android:gravity="center"
     android:paddingTop="40dp"
     android:orientation="vertical">
@@ -166,7 +166,7 @@
 
 
         </LinearLayout>
-        <com.aaroza.classroom.newui.views.TestView
+        <com.aaroza.classroom.newui.views.login1.TestView
             android:layout_gravity="bottom"
             android:layout_width="wrap_content"
             android:layout_height="500dp"

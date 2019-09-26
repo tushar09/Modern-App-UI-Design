@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#39A7AF"
-    tools:context=".activity.Login1Activity">
+    tools:context=".activity.login.Login1Activity">
 
     <com.aaroza.classroom.newui.views.login1.CircleView
         android:layout_width="match_parent"
