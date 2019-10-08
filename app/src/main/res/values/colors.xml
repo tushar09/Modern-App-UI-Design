@@ -18,4 +18,5 @@
     <color name="transparent">#00ffffff</color>
     <color name="edittext_underline">#C4C4C4</color>
     <color name="qer">#50CCCCCC</color>
+    <color name="white">#fff</color>
 </resources>

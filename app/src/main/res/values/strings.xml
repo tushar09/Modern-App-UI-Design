@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">New UI</string>
+    <string name="login">Login</string>
+    <string name="email_or_username">Email orUsername..</string>
 </resources>
