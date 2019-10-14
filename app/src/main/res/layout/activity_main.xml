@@ -41,6 +41,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
+                            android:id="@+id/tv_create_account"
                             android:textColor="#ff0000"
                             android:text=" Create your account."
                             android:layout_width="wrap_content"
@@ -55,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <EditText
+                        android:id="@+id/et_email"
                         android:text="wtushar09@gmail.com"
                         android:backgroundTint="@color/edittext_underline"
                         android:drawableTint="@color/drawable_icon"
@@ -63,6 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <EditText
+                        android:id="@+id/et_password"
                         android:text="12345678"
                         android:backgroundTint="@color/edittext_underline"
                         android:drawableTint="@color/drawable_icon"

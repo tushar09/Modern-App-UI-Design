@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aaroza.classroom.newui.R;
 import com.aaroza.classroom.newui.databinding.ActivityMainBinding;
@@ -56,8 +57,28 @@ public class MainActivity extends AppCompatActivity{
         findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(isValidEmail(binding.etEmail.getText().toString())){
+                    login();
+                }else {
+                    Toast.makeText(MainActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
                 startActivity(new Intent(MainActivity.this, Login1Activity.class));
             }
         });
+    }
+
+    private void login(){
+
+    }
+
+    private boolean isValidEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
     }
 }
