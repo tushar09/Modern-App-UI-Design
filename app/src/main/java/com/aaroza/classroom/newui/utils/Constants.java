@@ -10,6 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Constants{
+    public static final String BASE_URL_SOCKET = "http://192.168.10.17:3000/con";
     public static String BASE_URL = "http://192.168.10.17:3000/";
     private static ApiService apiService;
 
