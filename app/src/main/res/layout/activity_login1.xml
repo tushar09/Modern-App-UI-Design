@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#39A7AF"
-    tools:context=".activity.login.Login1Activity">
-
-    <com.aaroza.classroom.newui.views.login1.CircleView
+<layout>
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#39A7AF"
+        tools:context=".activity.login.Login1Activity">
 
-    <LinearLayout
-        android:padding="15dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:text="@string/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <EditText
-            android:hint="@string/email_or_username"
-            android:singleLine="true"
-            android:padding="10dp"
-            android:background="@drawable/rounded_border"
-            android:layout_marginTop="?actionBarSize"
+        <com.aaroza.classroom.newui.views.login1.CircleView
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
-        <EditText
-            android:inputType="textPassword"
-            android:hint="@string/password"
-            android:singleLine="true"
-            android:padding="10dp"
-            android:background="@drawable/rounded_border"
-            android:layout_marginTop="30dp"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"/>
-        <Button
-            android:textColor="@color/white"
-            android:text="@string/go"
-            android:layout_marginTop="35dp"
-            android:background="@drawable/rounded_border_login1_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+            android:layout_height="match_parent"/>
 
-</FrameLayout>
+        <LinearLayout
+            android:padding="15dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:text="@string/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:hint="@string/email_or_username"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:background="@drawable/rounded_border"
+                android:layout_marginTop="?actionBarSize"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"/>
+            <EditText
+                android:inputType="textPassword"
+                android:hint="@string/password"
+                android:singleLine="true"
+                android:padding="10dp"
+                android:background="@drawable/rounded_border"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"/>
+            <Button
+                android:textColor="@color/white"
+                android:text="@string/go"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/rounded_border_login1_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </FrameLayout>
+</layout>
