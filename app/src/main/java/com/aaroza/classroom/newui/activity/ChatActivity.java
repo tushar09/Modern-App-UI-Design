@@ -30,7 +30,7 @@ public class ChatActivity extends AppCompatActivity{
         try{
             LoginRequestDto dto = new LoginRequestDto();
             dto.setName("name");
-            dto.setEmail("ema");
+            dto.setEmail("wtushar09s@gmail.com");
             dto.setPass("pass");
             socket = IO.socket(Constants.BASE_URL_SOCKET, opts);
             socket.emit("userInfo", new Gson().toJson(dto));
