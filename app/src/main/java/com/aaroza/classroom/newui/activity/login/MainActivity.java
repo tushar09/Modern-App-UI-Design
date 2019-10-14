@@ -2,6 +2,7 @@ package com.aaroza.classroom.newui.activity.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,17 +16,16 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.aaroza.classroom.newui.R;
+import com.aaroza.classroom.newui.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity{
 
-
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
          //finally change the color
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
