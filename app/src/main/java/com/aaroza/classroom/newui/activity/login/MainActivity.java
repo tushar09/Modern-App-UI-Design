@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
          //finally change the color
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -43,6 +42,8 @@ public class MainActivity extends AppCompatActivity{
             View decor = getWindow().getDecorView();
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         getSupportActionBar().hide();
         TextView tv = findViewById(R.id.tv_login);
