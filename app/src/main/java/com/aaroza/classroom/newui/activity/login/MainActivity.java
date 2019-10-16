@@ -17,7 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaroza.classroom.newui.R;
+import com.aaroza.classroom.newui.activity.ChatActivity;
 import com.aaroza.classroom.newui.databinding.ActivityMainBinding;
+import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
+import com.aaroza.classroom.newui.dto.login.LoginResponseDto;
+import com.aaroza.classroom.newui.utils.Constants;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -57,24 +65,32 @@ public class MainActivity extends AppCompatActivity{
         findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(isValidEmail(binding.etEmail.getText().toString())){
-                    login();
-                }else {
-                    Toast.makeText(MainActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
-                }
+                login();
+            }
+        });
 
-            }
-        });
-        findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, Login1Activity.class));
-            }
-        });
     }
 
     private void login(){
+        final LoginRequestDto dto = new LoginRequestDto();
+        dto.setEmail(binding.etEmail.getText().toString());
+        dto.setName("adsf");
+        dto.setPhone("1234");
+        Constants.getApiService().login(dto).enqueue(new Callback<LoginResponseDto>(){
+            @Override
+            public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response){
+                if(response.isSuccessful()){
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class)
+                            .putExtra("email", dto.getEmail())
+                    );
+                }
+            }
 
+            @Override
+            public void onFailure(Call<LoginResponseDto> call, Throwable t){
+
+            }
+        });
     }
 
     private boolean isValidEmail(String email) {
