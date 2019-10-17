@@ -1,7 +1,11 @@
 package com.aaroza.classroom.newui.activity.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
 import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
@@ -10,9 +14,15 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +33,8 @@ import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.login.LoginResponseDto;
 import com.aaroza.classroom.newui.utils.Constants;
 
+import java.net.HttpURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +42,10 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity{
 
     private ActivityMainBinding binding;
+
+    private ConstraintLayout constraintLayout;
+    private ConstraintSet constraintSet1 = new ConstraintSet();
+    private ConstraintSet constraintSet2 = new ConstraintSet();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,7 +68,13 @@ public class MainActivity extends AppCompatActivity{
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 
+        getWindow().setEnterTransition(null);
+        getWindow().setExitTransition(null);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        constraintLayout = binding.activityMain;
+        constraintSet1.clone(constraintLayout);
+        constraintSet2.clone(this, R.layout.activity_signup);
 
         getSupportActionBar().hide();
         TextView tv = findViewById(R.id.tv_login);
@@ -61,6 +83,12 @@ public class MainActivity extends AppCompatActivity{
                 new int[]{Color.parseColor("#800CDD"), Color.parseColor("#3BA3F2")},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         tv.getPaint().setShader(textShader);
+
+        if(Constants.getSPreferences().isLoggedIn()){
+            startActivity(new Intent(MainActivity.this, ChatActivity.class)
+                    .putExtra("email", Constants.getSPreferences().getEmail())
+            );
+        }
 
         findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){
             @Override
@@ -72,7 +100,13 @@ public class MainActivity extends AppCompatActivity{
         binding.tvCreateAccount.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, SignupActivity.class));
+                Pair<View, String> p1 = Pair.create((View)binding.btLogin, "btLogin");
+                Pair<View, String> p2 = Pair.create((View)binding.tvLogin, "tvLogin");
+                Pair<View, String> p3 = Pair.create((View)binding.etEmail, "etEmail");
+                Pair<View, String> p4 = Pair.create((View)binding.etPassword, "etPass");
+                ActivityOptionsCompat activityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, p1, p2, p3, p4);
+                Intent in = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(in,activityOptionsCompat.toBundle());
             }
         });
 
@@ -86,10 +120,14 @@ public class MainActivity extends AppCompatActivity{
         Constants.getApiService().login(dto).enqueue(new Callback<LoginResponseDto>(){
             @Override
             public void onResponse(Call<LoginResponseDto> call, Response<LoginResponseDto> response){
-                if(response.isSuccessful()){
-                    startActivity(new Intent(MainActivity.this, ChatActivity.class)
-                            .putExtra("email", dto.getEmail())
-                    );
+                if(response.code() == HttpURLConnection.HTTP_OK){
+                    if(response.body().getSuccess()){
+                        Constants.getSPreferences().setLoggedIn(true);
+                        Constants.getSPreferences().setEmail(dto.getEmail());
+                        startActivity(new Intent(MainActivity.this, ChatActivity.class)
+                                .putExtra("email", dto.getEmail())
+                        );
+                    }
                 }
             }
 

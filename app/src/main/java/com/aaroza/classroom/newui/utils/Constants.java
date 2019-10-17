@@ -1,5 +1,6 @@
 package com.aaroza.classroom.newui.utils;
 
+import com.aaroza.classroom.newui.App;
 import com.aaroza.classroom.newui.services.ApiService;
 
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ public class Constants{
     public static final String BASE_URL_SOCKET = "http://192.168.10.17:3000/con";
     public static String BASE_URL = "http://192.168.10.17:3000/";
     private static ApiService apiService;
+    private static SPreferences sPreferences;
 
     public static final ApiService getApiService() {
         if (apiService == null) {
@@ -31,5 +33,12 @@ public class Constants{
                     .create(ApiService.class);
         }
         return apiService;
+    }
+
+    public static final SPreferences getSPreferences() {
+        if (sPreferences == null) {
+            sPreferences = new SPreferences(App.context);
+        }
+        return sPreferences;
     }
 }

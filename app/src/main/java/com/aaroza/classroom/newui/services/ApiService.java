@@ -9,6 +9,9 @@ import retrofit2.http.POST;
 
 public interface ApiService{
     @POST("users/createUser")
+    Call<LoginResponseDto> signup(@Body LoginRequestDto dto);
+
+    @POST("users/login")
     Call<LoginResponseDto> login(@Body LoginRequestDto dto);
 
 }
