@@ -15,8 +15,10 @@ import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.aaroza.classroom.newui.R;
+import com.aaroza.classroom.newui.activity.login.MainActivity;
 import com.aaroza.classroom.newui.databinding.ActivityChatBinding;
 import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.msg.MsgRequestDto;
@@ -51,12 +53,7 @@ public class ChatActivity extends AppCompatActivity{
         opts.transports = new String[]{WebSocket.NAME};
 
         try{
-            LoginRequestDto dto = new LoginRequestDto();
-            dto.setName("name");
-            dto.setEmail(email);
-            dto.setPass("pass");
             socket = IO.socket(Constants.BASE_URL_SOCKET, opts);
-            socket.emit("userInfo", new Gson().toJson(dto));
         }catch(URISyntaxException e){
             Log.e("connec err", e.toString());
             e.printStackTrace();
@@ -65,8 +62,17 @@ public class ChatActivity extends AppCompatActivity{
 
         socket.on("msg", new Emitter.Listener(){
             @Override
-            public void call(Object... args){
-                Log.e("msg", args[0].toString());
+            public void call(final Object... args){
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        TextView tv = new TextView(ChatActivity.this);
+                        tv.setText(args[0].toString());
+                        binding.llMsg.addView(tv, 0);
+                        Log.e("msg", args[0].toString());
+                    }
+                });
+
             }
         });
 
@@ -75,8 +81,10 @@ public class ChatActivity extends AppCompatActivity{
             public void onClick(View v){
                 MsgRequestDto dto = new MsgRequestDto();
                 dto.setEmail(binding.receiver.getText().toString());
+                dto.setSenderEmail(Constants.getSPreferences().getEmail());
                 dto.setText(binding.text.getText().toString());
                 socket.emit("sendMsg", new Gson().toJson(dto));
+                Log.e("sender", Constants.getSPreferences().getEmail());
 
 //                try{
 //                    sipManager.makeAudioCall(sipProfile.getUriString(), "sip:" + binding.text.getText().toString() + "@192.168.10.5", new SipAudioCall.Listener(){
@@ -218,5 +226,16 @@ public class ChatActivity extends AppCompatActivity{
         } catch (Exception ee) {
             Log.e("StatusWindow/onDestroy", "Failed to close local profile.", ee);
         }
+    }
+
+    @Override
+    protected void onPostResume(){
+        super.onPostResume();
+        LoginRequestDto dto = new LoginRequestDto();
+        dto.setName("name");
+        dto.setEmail(email);
+        dto.setPass("pass");
+        socket.emit("userInfo", new Gson().toJson(dto));
+        Log.e("should", "connect");
     }
 }

@@ -2,6 +2,7 @@ package com.aaroza.classroom.newui.dto.msg;
 
 public class MsgRequestDto{
     private String email;
+    private String senderEmail;
     private String text;
 
     public String getEmail(){
@@ -18,5 +19,13 @@ public class MsgRequestDto{
 
     public void setText(String text){
         this.text = text;
+    }
+
+    public String getSenderEmail(){
+        return senderEmail;
+    }
+
+    public void setSenderEmail(String senderEmail){
+        this.senderEmail = senderEmail;
     }
 }
