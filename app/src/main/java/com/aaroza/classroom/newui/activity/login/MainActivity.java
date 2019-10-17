@@ -69,6 +69,13 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        binding.tvCreateAccount.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(MainActivity.this, SignupActivity.class));
+            }
+        });
+
     }
 
     private void login(){

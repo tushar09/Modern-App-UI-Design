@@ -3,7 +3,15 @@ package com.aaroza.classroom.newui.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.sip.SipAudioCall;
+import android.net.sip.SipErrorCode;
+import android.net.sip.SipException;
+import android.net.sip.SipManager;
+import android.net.sip.SipProfile;
+import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,11 +27,15 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
 
 import java.net.URISyntaxException;
+import java.text.ParseException;
 
 public class ChatActivity extends AppCompatActivity{
 
     private ActivityChatBinding binding;
     private Socket socket;
+
+    public SipManager sipManager = null;
+    public SipProfile sipProfile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -49,11 +61,150 @@ public class ChatActivity extends AppCompatActivity{
         binding.send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                MsgRequestDto dto = new MsgRequestDto();
-                dto.setEmail(binding.receiver.getText().toString());
-                dto.setText(binding.text.getText().toString());
-                socket.emit("sendMsg", new Gson().toJson(dto));
+//                MsgRequestDto dto = new MsgRequestDto();
+//                dto.setEmail(binding.receiver.getText().toString());
+//                dto.setText(binding.text.getText().toString());
+//                socket.emit("sendMsg", new Gson().toJson(dto));
+
+                try{
+                    sipManager.makeAudioCall(sipProfile.getUriString(), "sip:" + binding.text.getText().toString() + "@192.168.10.5", new SipAudioCall.Listener(){
+                        @Override
+                        public void onError(SipAudioCall call, int errorCode, String errorMessage){
+                            super.onError(call, errorCode, errorMessage);
+                            Log.e("onError", errorCode + " " + errorMessage);
+                        }
+
+                        @Override
+                        public void onReadyToCall(SipAudioCall call){
+                            super.onReadyToCall(call);
+                            Log.e("onReadyToCall", "call");
+                        }
+
+                        @Override
+                        public void onCalling(SipAudioCall call){
+                            super.onCalling(call);
+                            Log.e("onCalling", "call");
+                        }
+
+                        @Override
+                        public void onRinging(SipAudioCall call, SipProfile caller){
+                            super.onRinging(call, caller);
+                            Log.e("onRinging", "call");
+                        }
+
+                        @Override
+                        public void onRingingBack(SipAudioCall call){
+                            super.onRingingBack(call);
+                            Log.e("onRingingBack", "call");
+                        }
+
+                        @Override
+                        public void onCallEstablished(SipAudioCall call){
+                            super.onCallEstablished(call);
+                            call.startAudio();
+                            call.setSpeakerMode(false);
+                            Log.e("onCallEstablished", "call");
+                        }
+
+                        @Override
+                        public void onCallEnded(SipAudioCall call){
+                            super.onCallEnded(call);
+                            Log.e("onCallEnded", "call");
+                        }
+
+                        @Override
+                        public void onCallBusy(SipAudioCall call){
+                            super.onCallBusy(call);
+                            Log.e("onCallBusy", "call");
+                        }
+
+                        @Override
+                        public void onCallHeld(SipAudioCall call){
+                            super.onCallHeld(call);
+                            Log.e("onCallHeld", "call");
+                        }
+
+                        @Override
+                        public void onChanged(SipAudioCall call){
+                            super.onChanged(call);
+                            Log.e("onChanged", "call");
+                        }
+                    }, 0);
+                }catch(SipException e){
+                    e.printStackTrace();
+                }
             }
         });
+
+
+
+        if (sipManager == null) {
+            sipManager = SipManager.newInstance(this);
+        }
+
+        if (sipProfile != null){
+            closeLocalProfile();
+        }
+
+        SipProfile.Builder builder = null;
+        try{
+            builder = new SipProfile.Builder("qwe", "qwer");
+            builder.setPassword("qwer");
+            sipProfile = builder.build();
+
+            Intent intent = new Intent();
+            intent.setAction("android.SipDemo.INCOMING_CALL");
+            final PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, Intent.FILL_IN_DATA);
+            sipManager.open(sipProfile);
+            Log.e("register", "register");
+
+
+            //sipManager.register(sipProfile, 30, lis);
+            sipManager.setRegistrationListener(sipProfile.getUriString(), new SipRegistrationListener(){
+                @Override
+                public void onRegistering(String localProfileUri){
+                    Log.e("onRegistering", localProfileUri);
+                }
+
+                @Override
+                public void onRegistrationDone(String localProfileUri, long expiryTime){
+                    Log.e("onRegistrationDone", localProfileUri + " " + expiryTime);
+                }
+
+                @Override
+                public void onRegistrationFailed(String localProfileUri, int errorCode, String errorMessage){
+                    Log.e("onRegistrationFailed", localProfileUri + " " + errorCode + " " + errorMessage);
+                }
+            });
+
+            if(SipManager.isVoipSupported(this)){
+                Log.e("isVoipSupported", "true");
+            }else {
+                Log.e("isVoipSupported", "false");
+            }
+
+
+        }catch(ParseException e){
+            Log.e("ParseException", e.toString());
+            e.printStackTrace();
+        }catch(SipException e){
+            Log.e("SipException", e.toString());
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void closeLocalProfile() {
+        if (sipManager == null) {
+            return;
+        }
+        try {
+            if (sipProfile != null) {
+                sipManager.close(sipProfile.getUriString());
+            }
+        } catch (Exception ee) {
+            Log.e("StatusWindow/onDestroy", "Failed to close local profile.", ee);
+        }
     }
 }
