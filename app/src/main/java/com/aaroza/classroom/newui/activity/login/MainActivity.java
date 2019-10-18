@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.aaroza.classroom.newui.R;
 import com.aaroza.classroom.newui.activity.ChatActivity;
+import com.aaroza.classroom.newui.activity.HomeActivity;
 import com.aaroza.classroom.newui.databinding.ActivityMainBinding;
 import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.login.LoginResponseDto;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity{
         tv.getPaint().setShader(textShader);
 
         if(Constants.getSPreferences().isLoggedIn()){
-            startActivity(new Intent(MainActivity.this, ChatActivity.class)
+            startActivity(new Intent(MainActivity.this, HomeActivity.class)
                     .putExtra("email", Constants.getSPreferences().getEmail())
             );
         }

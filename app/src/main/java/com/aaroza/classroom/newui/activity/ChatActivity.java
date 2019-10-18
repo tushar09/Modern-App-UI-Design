@@ -2,6 +2,7 @@ package com.aaroza.classroom.newui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -19,8 +20,11 @@ import android.widget.TextView;
 
 import com.aaroza.classroom.newui.R;
 import com.aaroza.classroom.newui.activity.login.MainActivity;
+import com.aaroza.classroom.newui.adapter.MsgHistoryAdapter;
 import com.aaroza.classroom.newui.databinding.ActivityChatBinding;
 import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
+import com.aaroza.classroom.newui.dto.msg.MsgHistoryRequestDto;
+import com.aaroza.classroom.newui.dto.msg.MsgHistoryResponseDto;
 import com.aaroza.classroom.newui.dto.msg.MsgRequestDto;
 import com.aaroza.classroom.newui.utils.Constants;
 import com.github.nkzawa.emitter.Emitter;
@@ -31,6 +35,11 @@ import com.google.gson.Gson;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity{
 
@@ -41,6 +50,9 @@ public class ChatActivity extends AppCompatActivity{
     public SipProfile sipProfile = null;
 
     private String email;
+
+    private MsgHistoryAdapter msgHistoryAdapter;
+    private List<MsgHistoryResponseDto> dtos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -66,10 +78,13 @@ public class ChatActivity extends AppCompatActivity{
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        TextView tv = new TextView(ChatActivity.this);
-                        tv.setText(args[0].toString());
-                        binding.llMsg.addView(tv, 0);
-                        Log.e("msg", args[0].toString());
+                        MsgHistoryResponseDto msgHistoryResponseDto = new MsgHistoryResponseDto();
+                        msgHistoryResponseDto.setText(args[0].toString());
+                        msgHistoryResponseDto.setEmail(email);
+                        dtos.add( dtos.size(), msgHistoryResponseDto);
+                        binding.rvMsg.getAdapter().notifyItemInserted(dtos.size());
+                        binding.rvMsg.scrollToPosition(dtos.size() - 1);
+                        Log.e("got", "got");
                     }
                 });
 
@@ -80,12 +95,11 @@ public class ChatActivity extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 MsgRequestDto dto = new MsgRequestDto();
-                dto.setEmail(binding.receiver.getText().toString());
+                dto.setEmail(email);
                 dto.setSenderEmail(Constants.getSPreferences().getEmail());
                 dto.setText(binding.text.getText().toString());
                 socket.emit("sendMsg", new Gson().toJson(dto));
                 Log.e("sender", Constants.getSPreferences().getEmail());
-
 //                try{
 //                    sipManager.makeAudioCall(sipProfile.getUriString(), "sip:" + binding.text.getText().toString() + "@192.168.10.5", new SipAudioCall.Listener(){
 //                        @Override
@@ -212,6 +226,27 @@ public class ChatActivity extends AppCompatActivity{
 //            e.printStackTrace();
 //        }
 
+        MsgHistoryRequestDto msgHistoryRequestDto = new MsgHistoryRequestDto();
+        msgHistoryRequestDto.setEmail(Constants.getSPreferences().getEmail());
+        msgHistoryRequestDto.setReceiverEmail(email);
+
+        Constants.getApiService().getMsgHistory(msgHistoryRequestDto).enqueue(new Callback<List<MsgHistoryResponseDto>>(){
+            @Override
+            public void onResponse(Call<List<MsgHistoryResponseDto>> call, Response<List<MsgHistoryResponseDto>> response){
+                dtos = response.body();
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+                //linearLayoutManager.setReverseLayout(true);
+                binding.rvMsg.setLayoutManager(linearLayoutManager);
+                msgHistoryAdapter = new MsgHistoryAdapter(dtos, ChatActivity.this);
+                binding.rvMsg.setAdapter(msgHistoryAdapter);
+                binding.rvMsg.scrollToPosition(dtos.size() - 1);
+            }
+
+            @Override
+            public void onFailure(Call<List<MsgHistoryResponseDto>> call, Throwable t){
+
+            }
+        });
 
     }
 
@@ -233,7 +268,7 @@ public class ChatActivity extends AppCompatActivity{
         super.onPostResume();
         LoginRequestDto dto = new LoginRequestDto();
         dto.setName("name");
-        dto.setEmail(email);
+        dto.setEmail(Constants.getSPreferences().getEmail());
         dto.setPass("pass");
         socket.emit("userInfo", new Gson().toJson(dto));
         Log.e("should", "connect");

@@ -2,35 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aaroza.classroom.newui">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CONFIGURE_SIP" />
-    <uses-permission android:name="android.permission.USE_SIP" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
-    <uses-feature android:name="android.software.sip" android:required="true" />
-    <uses-feature android:name="android.hardware.sip.voip" android:required="true" />
-    <uses-feature android:name="android.hardware.wifi" android:required="true" />
-    <uses-feature android:name="android.hardware.microphone" android:required="true" />
-    <uses-feature android:name="android.hardware.telephony" android:required="true" />
-
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:name=".App">
-        <activity android:name=".activity.login.SignupActivity"></activity>
-        <activity android:name=".activity.ChatActivity">
-        </activity>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".activity.HomeActivity"></activity>
+        <activity android:name=".activity.login.SignupActivity" />
+        <activity android:name=".activity.ChatActivity"></activity>
         <activity android:name=".activity.login.Login1Activity" />
         <activity android:name=".activity.login.MainActivity">
             <intent-filter>
@@ -40,6 +23,33 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-feature
+        android:name="android.software.sip"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sip.voip"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.CONFIGURE_SIP" />
+    <uses-permission android:name="android.permission.USE_SIP" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

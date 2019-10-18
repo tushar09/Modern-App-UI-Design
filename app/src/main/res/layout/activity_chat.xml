@@ -8,29 +8,37 @@
         tools:context=".activity.ChatActivity"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/receiver"
-            android:text="2222"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_msg"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:text="01857190697"
-            android:id="@+id/text"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:text="send"
-            android:id="@+id/send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"/>
 
         <LinearLayout
-            android:id="@+id/ll_msg"
+            android:gravity="end"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/receiver"
+                android:text="2222"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:text="01857190697"
+                android:id="@+id/text"
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:text="send"
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 </layout>
