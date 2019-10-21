@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.aaroza.classroom.newui.R;
 import com.aaroza.classroom.newui.activity.ChatActivity;
 import com.aaroza.classroom.newui.activity.HomeActivity;
+import com.aaroza.classroom.newui.activity.call.CallActivity;
+import com.aaroza.classroom.newui.activity.call.IncomingCallActivity;
 import com.aaroza.classroom.newui.databinding.ActivityMainBinding;
 import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.login.LoginResponseDto;
@@ -39,6 +41,8 @@ import java.net.HttpURLConnection;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.aaroza.classroom.newui.utils.Constants.EXTRA_ROOMID;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -89,6 +93,14 @@ public class MainActivity extends AppCompatActivity{
             startActivity(new Intent(MainActivity.this, HomeActivity.class)
                     .putExtra("email", Constants.getSPreferences().getEmail())
             );
+//            startActivity(new Intent(MainActivity.this, CallActivity.class)
+//                    .putExtra(EXTRA_ROOMID, "zxcvbnm")
+//            );
+
+//            Intent intent = new Intent(MainActivity.this, CallActivity.class);
+//            intent.putExtra(EXTRA_ROOMID, "" + System.currentTimeMillis());
+//            startActivityForResult(intent, 1);
+
         }
 
         findViewById(R.id.bt_login).setOnClickListener(new View.OnClickListener(){

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.aaroza.classroom.newui.App;
 import com.aaroza.classroom.newui.R;
+import com.aaroza.classroom.newui.activity.call.OutgoingCallActivity;
 import com.aaroza.classroom.newui.activity.login.MainActivity;
 import com.aaroza.classroom.newui.adapter.MsgHistoryAdapter;
 import com.aaroza.classroom.newui.databinding.ActivityChatBinding;
@@ -147,6 +148,15 @@ public class ChatActivity extends AppCompatActivity{
 //                }catch(SipException e){
 //                    e.printStackTrace();
 //                }
+            }
+        });
+
+        binding.call.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(ChatActivity.this, OutgoingCallActivity.class)
+                        .putExtra("name", email)
+                );
             }
         });
 

@@ -19,4 +19,6 @@
     <color name="edittext_underline">#C4C4C4</color>
     <color name="qer">#50CCCCCC</color>
     <color name="white">#fff</color>
+    <color name="red">#ff0000</color>
+    <color name="green">#3BC53B</color>
 </resources>

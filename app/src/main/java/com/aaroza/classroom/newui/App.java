@@ -2,12 +2,16 @@ package com.aaroza.classroom.newui;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.aaroza.classroom.newui.activity.call.IncomingCallActivity;
 import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.msg.MsgHistoryResponseDto;
 import com.aaroza.classroom.newui.dto.msg.MsgRequestDto;
+import com.aaroza.classroom.newui.eventBus.CallDto;
+import com.aaroza.classroom.newui.eventBus.CallReceive;
 import com.aaroza.classroom.newui.eventBus.MsgDto;
 import com.aaroza.classroom.newui.utils.Constants;
 import com.github.nkzawa.emitter.Emitter;
@@ -50,27 +54,20 @@ public class App extends Application{
             @Override
             public void call(final Object... args){
                 MsgDto dto = new Gson().fromJson(args[0].toString(), MsgDto.class);
-//                context.runOnUiThread(new Runnable(){
-//                    @Override
-//                    public void run(){
-//                        MsgHistoryResponseDto msgHistoryResponseDto = new MsgHistoryResponseDto();
-//                        msgHistoryResponseDto.setText(args[0].toString());
-//                        msgHistoryResponseDto.setEmail(email);
-//                        dtos.add( dtos.size(), msgHistoryResponseDto);
-//                        binding.rvMsg.getAdapter().notifyItemInserted(dtos.size());
-//                        binding.rvMsg.scrollToPosition(dtos.size() - 1);
-//
-//                        EventBus.getDefault().post(new MessageEvent());
-//                    }
-//                });
                 EventBus.getDefault().post(dto);
-                Log.e("msg", args[0].toString());
-
             }
-        }).on("asdf", new Emitter.Listener(){
+        }).on("call", new Emitter.Listener(){
             @Override
             public void call(Object... args){
-
+                startActivity(new Intent(context, IncomingCallActivity.class)
+                        .putExtra("data", args[0].toString())
+                );
+                Log.e("deetcted", args[0].toString());
+            }
+        }).on("callReceive", new Emitter.Listener(){
+            @Override
+            public void call(Object... args){
+                EventBus.getDefault().post("adfs");
             }
         });
     }
@@ -90,4 +87,23 @@ public class App extends Application{
         dto.setText(text);
         socket.emit("sendMsg", new Gson().toJson(dto));
     }
+
+
+    public static void call(String receiver, String caller, String roomId){
+
+        CallDto callDto = new CallDto();
+        callDto.setRoomId(roomId);
+        callDto.setCaller(caller);
+        callDto.setReceiver(receiver);
+
+        socket.emit("call", new Gson().toJson(callDto));
+    }
+
+    public static void callReceive(boolean isReceived, String caller){
+        CallReceive callReceive = new CallReceive();
+        callReceive.setReceived(isReceived);
+        callReceive.setCaller(caller);
+        socket.emit("callReceive", new Gson().toJson(callReceive));
+    }
+
 }
