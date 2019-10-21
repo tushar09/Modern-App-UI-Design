@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.aaroza.classroom.newui.App;
 import com.aaroza.classroom.newui.R;
 import com.aaroza.classroom.newui.activity.login.MainActivity;
 import com.aaroza.classroom.newui.adapter.MsgHistoryAdapter;
@@ -26,12 +27,17 @@ import com.aaroza.classroom.newui.dto.login.LoginRequestDto;
 import com.aaroza.classroom.newui.dto.msg.MsgHistoryRequestDto;
 import com.aaroza.classroom.newui.dto.msg.MsgHistoryResponseDto;
 import com.aaroza.classroom.newui.dto.msg.MsgRequestDto;
+import com.aaroza.classroom.newui.eventBus.MsgDto;
 import com.aaroza.classroom.newui.utils.Constants;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.engineio.client.transports.WebSocket;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -61,45 +67,19 @@ public class ChatActivity extends AppCompatActivity{
 
         email = getIntent().getStringExtra("email");
 
-        IO.Options opts = new IO.Options();
-        opts.transports = new String[]{WebSocket.NAME};
-
-        try{
-            socket = IO.socket(Constants.BASE_URL_SOCKET, opts);
-        }catch(URISyntaxException e){
-            Log.e("connec err", e.toString());
-            e.printStackTrace();
-        }
-        socket.connect();
-
-        socket.on("msg", new Emitter.Listener(){
-            @Override
-            public void call(final Object... args){
-                runOnUiThread(new Runnable(){
-                    @Override
-                    public void run(){
-                        MsgHistoryResponseDto msgHistoryResponseDto = new MsgHistoryResponseDto();
-                        msgHistoryResponseDto.setText(args[0].toString());
-                        msgHistoryResponseDto.setEmail(email);
-                        dtos.add( dtos.size(), msgHistoryResponseDto);
-                        binding.rvMsg.getAdapter().notifyItemInserted(dtos.size());
-                        binding.rvMsg.scrollToPosition(dtos.size() - 1);
-                        Log.e("got", "got");
-                    }
-                });
-
-            }
-        });
 
         binding.send.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                MsgRequestDto dto = new MsgRequestDto();
-                dto.setEmail(email);
-                dto.setSenderEmail(Constants.getSPreferences().getEmail());
-                dto.setText(binding.text.getText().toString());
-                socket.emit("sendMsg", new Gson().toJson(dto));
-                Log.e("sender", Constants.getSPreferences().getEmail());
+
+                App.sendMsg(email, binding.text.getText().toString());
+
+                MsgHistoryResponseDto msgHistoryResponseDto = new MsgHistoryResponseDto();
+                msgHistoryResponseDto.setText(binding.text.getText().toString());
+                msgHistoryResponseDto.setEmail(Constants.getSPreferences().getEmail());
+                dtos.add( dtos.size(), msgHistoryResponseDto);
+                binding.rvMsg.getAdapter().notifyItemInserted(dtos.size());
+                binding.rvMsg.scrollToPosition(dtos.size() - 1);
 //                try{
 //                    sipManager.makeAudioCall(sipProfile.getUriString(), "sip:" + binding.text.getText().toString() + "@192.168.10.5", new SipAudioCall.Listener(){
 //                        @Override
@@ -263,14 +243,33 @@ public class ChatActivity extends AppCompatActivity{
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MsgDto event) {
+        if(event.getSender().equals(email)){
+            MsgHistoryResponseDto msgHistoryResponseDto = new MsgHistoryResponseDto();
+            msgHistoryResponseDto.setText(event.getText());
+            msgHistoryResponseDto.setEmail(email);
+            dtos.add(dtos.size(), msgHistoryResponseDto);
+            binding.rvMsg.getAdapter().notifyItemInserted(dtos.size());
+            binding.rvMsg.scrollToPosition(dtos.size() - 1);
+        }
+    }
+
     @Override
     protected void onPostResume(){
         super.onPostResume();
-        LoginRequestDto dto = new LoginRequestDto();
-        dto.setName("name");
-        dto.setEmail(Constants.getSPreferences().getEmail());
-        dto.setPass("pass");
-        socket.emit("userInfo", new Gson().toJson(dto));
-        Log.e("should", "connect");
+        App.userInfo();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

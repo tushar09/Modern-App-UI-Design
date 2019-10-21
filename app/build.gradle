@@ -44,4 +44,5 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }
