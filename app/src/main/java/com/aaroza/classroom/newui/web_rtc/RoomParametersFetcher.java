@@ -167,6 +167,7 @@ public class RoomParametersFetcher {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setDoOutput(true);
         connection.setRequestProperty("REFERER", "https://appr.tc");
+        //connection.setRequestProperty("REFERER", "192.168.10.17");
         connection.setConnectTimeout(TURN_HTTP_TIMEOUT_MS);
         connection.setReadTimeout(TURN_HTTP_TIMEOUT_MS);
         int responseCode = connection.getResponseCode();

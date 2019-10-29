@@ -141,12 +141,14 @@ public class MainActivity extends AppCompatActivity{
                                 .putExtra("email", dto.getEmail())
                         );
                     }
+                }else {
+                    Log.e("error", response.code() + "");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponseDto> call, Throwable t){
-
+                Log.e("error", t.toString());
             }
         });
     }

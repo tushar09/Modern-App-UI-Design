@@ -61,6 +61,7 @@ public class App extends Application{
             public void call(Object... args){
                 startActivity(new Intent(context, IncomingCallActivity.class)
                         .putExtra("data", args[0].toString())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 );
                 Log.e("deetcted", args[0].toString());
             }

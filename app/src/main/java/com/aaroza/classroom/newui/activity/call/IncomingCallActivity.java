@@ -65,14 +65,9 @@ public class IncomingCallActivity extends AppCompatActivity{
             public void onClick(View v){
                 Log.e("room", callDto.getRoomId() + "");
                 App.callReceive(true, callDto.getCaller());
-                binding.getRoot().postDelayed(new Runnable(){
-                    @Override
-                    public void run(){
-                        Intent intent = new Intent(IncomingCallActivity.this, CallActivity.class);
-                        intent.putExtra(EXTRA_ROOMID, callDto.getRoomId());
-                        startActivityForResult(intent, 1);
-                    }
-                }, 5000);
+                Intent intent = new Intent(IncomingCallActivity.this, CallActivity.class);
+                intent.putExtra(EXTRA_ROOMID, callDto.getRoomId());
+                startActivityForResult(intent, 1);
 
             }
         });

@@ -53,7 +53,7 @@ import static org.webrtc.RendererCommon.ScalingType.SCALE_ASPECT_FIT;
  * Activity for peer connection call setup, call waiting
  * and call view.
  */
-public class CallActivity extends AppCompatActivity
+public class CallActivity extends BaseActivity
         implements AppRTCClient.SignalingEvents, PeerConnectionClient.PeerConnectionEvents, OnCallEvents {
     private static final String LOG_TAG = "CallActivity";
 
@@ -86,6 +86,7 @@ public class CallActivity extends AppCompatActivity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_call);
 
         remoteRenderers.add(binding.remoteVideoView);
+
 
         // Create video renderers.
         rootEglBase = EglBase.create();

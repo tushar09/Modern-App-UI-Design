@@ -61,6 +61,10 @@ public class ChatActivity extends AppCompatActivity{
     private MsgHistoryAdapter msgHistoryAdapter;
     private List<MsgHistoryResponseDto> dtos;
 
+    static {
+        System.loadLibrary("native-lib");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -264,6 +268,8 @@ public class ChatActivity extends AppCompatActivity{
             binding.rvMsg.scrollToPosition(dtos.size() - 1);
         }
     }
+
+    public native String stringFromJNI();
 
     @Override
     protected void onPostResume(){

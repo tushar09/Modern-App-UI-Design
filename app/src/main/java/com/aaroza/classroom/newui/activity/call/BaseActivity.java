@@ -1,7 +1,10 @@
-package com.aaroza.classroom.newui.utils;
+package com.aaroza.classroom.newui.activity.call;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.aaroza.classroom.newui.App;
 import com.aaroza.classroom.newui.services.ApiService;
+import com.aaroza.classroom.newui.utils.SPreferences;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,8 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Constants{
-
+public class BaseActivity extends AppCompatActivity{
     public static final String EXTRA_ROOMID = "org.appspot.apprtc.ROOMID";
     public static final int CAPTURE_PERMISSION_REQUEST_CODE = 1;
 
@@ -38,8 +40,8 @@ public class Constants{
     public static final int REMOTE_HEIGHT = 100;
 
 
-    public static final String BASE_URL_SOCKET = "http://192.168.0.9:3000/con";
-    public static String BASE_URL = "http://192.168.0.9:3000/";
+    public static final String BASE_URL_SOCKET = "http://192.168.10.17:3000/con";
+    public static String BASE_URL = "http://192.168.10.17:3000/";
     private static ApiService apiService;
     private static SPreferences sPreferences;
 
